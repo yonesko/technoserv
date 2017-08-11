@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Word</th>
+        <th>Count</th>
+    </tr>
+    <tr th:each="word : ${words}">
+        <td><a th:href="@{/refine(word=${word.getKey()})}" th:text="${word.getKey()}"/></td>
+        <td th:text="${word.getValue()}"></td>
+    </tr>
+</table>
+</body>
+</html>

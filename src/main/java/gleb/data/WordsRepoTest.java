@@ -15,7 +15,7 @@ public class WordsRepoTest implements WordsRepo {
         table.put(1, new NewsItem("На берег в Британии выбросило гигантские трубы", ZonedDateTime.now().minus(Duration.ofDays(1))));
         table.put(2, new NewsItem("В туриндустрии отреагировали на решение России об опасности отдыха в Турции", ZonedDateTime.now().minus(Duration.ofDays(2))));
         table.put(3, new NewsItem("Прохоров продал семь процентов «Русала» по цене ниже рыночной", ZonedDateTime.now().minus(Duration.ofDays(3))));
-        table.put(4, new NewsItem("Прохоров продал семь процентов «Русала» по цене ниже рыночной", ZonedDateTime.now().minus(Duration.ofDays(3))));
+        table.put(4, new NewsItem("Прохоров продал семь процентов «Русала» по цене ниже рыночной", ZonedDateTime.now().minus(Duration.ofDays(5))));
     }
 
     @Override
