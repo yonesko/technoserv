@@ -9,7 +9,7 @@
         <th>Word</th>
         <th>Count</th>
     </tr>
-    <tr th:each="word : ${words}">
+    <tr th:each="word : ${wordStat}">
         <td><a th:href="@{/refine(word=${word.getKey()})}" th:text="${word.getKey()}"/></td>
         <td th:text="${word.getValue()}"></td>
     </tr>

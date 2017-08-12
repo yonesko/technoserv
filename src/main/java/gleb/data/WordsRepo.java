@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 public interface WordsRepo {
-    Map<String, Integer> allWords();
+    Map<String, Integer> wordStat();
 
     Set<NewsItem> findByWord(String word);
 }

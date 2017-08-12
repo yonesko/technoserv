@@ -12,14 +12,14 @@ public class WordsRepoTest implements WordsRepo {
     private Map<Integer, NewsItem> table = new HashMap<>();
 
     public WordsRepoTest() {
-        table.put(1, new NewsItem("На берег в Британии выбросило гигантские трубы", ZonedDateTime.now().minus(Duration.ofDays(1))));
-        table.put(2, new NewsItem("В туриндустрии отреагировали на решение России об опасности отдыха в Турции", ZonedDateTime.now().minus(Duration.ofDays(2))));
-        table.put(3, new NewsItem("Прохоров продал семь процентов «Русала» по цене ниже рыночной", ZonedDateTime.now().minus(Duration.ofDays(3))));
-        table.put(4, new NewsItem("Прохоров продал семь процентов «Русала» по цене ниже рыночной", ZonedDateTime.now().minus(Duration.ofDays(5))));
+        table.put(1, new NewsItem("1", "На берег в Британии выбросило гигантские трубы", ZonedDateTime.now().minus(Duration.ofDays(1))));
+        table.put(2, new NewsItem("1", "В туриндустрии отреагировали на решение России об опасности отдыха в Турции", ZonedDateTime.now().minus(Duration.ofDays(2))));
+        table.put(3, new NewsItem("1", "Прохоров продал семь процентов «Русала» по цене ниже рыночной", ZonedDateTime.now().minus(Duration.ofDays(3))));
+        table.put(4, new NewsItem("1", "Прохоров продал семь процентов «Русала» по цене ниже рыночной", ZonedDateTime.now().minus(Duration.ofDays(5))));
     }
 
     @Override
-    public Map<String, Integer> allWords() {
+    public Map<String, Integer> wordStat() {
         HashMap<String, Integer> ret = new HashMap<>();
 
         StringBuilder sb = new StringBuilder();

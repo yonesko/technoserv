@@ -22,9 +22,9 @@ public class Controller {
     public String allWords(Model model) {
         Map<String, Integer> ret = new HashMap<>();
 
-        ret = wordsRepo.allWords();
+        ret = wordsRepo.wordStat();
 
-        model.addAttribute("words", ret);
+        model.addAttribute("wordStat", ret);
 
         return "index";
     }
