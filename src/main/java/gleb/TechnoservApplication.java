@@ -29,7 +29,7 @@ public class TechnoservApplication {
         return new WordsRepoSolr();
     }
 
-    @Bean
+//    @Bean
     CommandLineRunner initSolr() {
         return (args) -> {
             SolrClient solr = new HttpSolrClient.Builder("http://localhost:8983/solr/newsitem").build();

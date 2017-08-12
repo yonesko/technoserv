@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="angular.min.js"></script>
+    <script src="angular-route.js"></script>
+    <script src="code.js"></script>
+</head>
+<body ng-app="newsWordStat">
+
+<div ng-controller="wordStat">
+
+    <table>
+        <tr>
+            <th>Word</th>
+            <th>Count</th>
+        </tr>
+        <tr ng-repeat="(word, count) in wordStat">
+            <td><a id="link-3" ng-href="#!wordStat/refine/{{word}}">{{word}}</a></td>
+            <td>{{count}}</td>
+        </tr>
+    </table>
+
+    <div ng-view></div>
+
+</div>
+
+</body>
+</html>

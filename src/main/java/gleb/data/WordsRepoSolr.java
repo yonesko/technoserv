@@ -41,6 +41,7 @@ public class WordsRepoSolr implements WordsRepo {
         query.addHighlightField("content_txt_en");
         query.setHighlightSimplePost("</b>");
         query.setHighlightSimplePre("<b>");
+        query.setHighlightFragsize(0);
 
         try {
             QueryResponse response = solr.query(query);
