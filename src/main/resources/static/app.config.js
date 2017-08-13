@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('phonecatApp').config(['$locationProvider', '$routeProvider',
+angular.module('words-popularity-monitor').config(['$locationProvider', '$routeProvider',
     function config($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');
 

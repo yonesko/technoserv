@@ -1,8 +1,7 @@
 'use strict';
 
-angular.module('phonecatApp', [
+angular.module('words-popularity-monitor', [
     'ngRoute',
-    'ngResource',
     'chart.js'
 ]).factory('WordsStatResource', ['$resource', function ($resource) {
     return $resource('/wordStat', {}, {})

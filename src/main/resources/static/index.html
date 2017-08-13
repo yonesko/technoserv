@@ -1,25 +1,25 @@
 <!doctype html>
-<html lang="en" ng-app="phonecatApp">
-  <head>
+<html lang="en" ng-app="words-popularity-monitor">
+<head>
     <meta charset="utf-8">
-    <title>Google Phone Gallery</title>
-    <script src="angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
-    <script src="angular-chart.js"></script>
-    <script src="angular-route.js"></script>
-    <script src="angular-resource.js"></script>
+    <title>words popularity monitor</title>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/chart.js/dist/Chart.min.js"></script>
+    <script src="bower_components/angular-chart.js/angular-chart.js"></script>
 
     <script src="app.module.js"></script>
     <script src="app.config.js"></script>
 
-  </head>
+</head>
 
-  <a href="#!/wordsStat">Main</a>
+<a href="#!/wordsStat">Main</a>
 
 
-  <body>
+<body>
 
-    <div ng-view></div>
+<div ng-view></div>
 
-  </body>
+</body>
 </html>
