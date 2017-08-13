@@ -9,7 +9,11 @@
     <p ng-bind-html="content"></p>
 </div>
 
-<canvas id="line" class="chart chart-bar" chart-data="data" chart-labels="labels">
-</canvas>
+<div class="chart-container" style="position: relative; height:400px; width:400px">
+    <canvas id="line" width="400" height="400" class="chart chart-line" chart-data="data" chart-labels="labels">
+    </canvas>
+</div>
+
+
 </body>
 </html>
