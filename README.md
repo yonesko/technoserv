@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yonesko/technoserv.svg?branch=master)](https://travis-ci.org/yonesko/technoserv)
+[![Build Status](https://travis-ci.org/yonesko/technoserv.svg?branch=master)](https://travis-ci.org/yonesko/technoserv)  
 Общие требования  
 Проект должен:  
  размещаться на https://github.com/ в открытом доступе  
