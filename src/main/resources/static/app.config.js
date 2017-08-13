@@ -8,7 +8,8 @@ angular.module('phonecatApp').config(['$locationProvider', '$routeProvider',
             templateUrl: 'wordsStat.html',
             controller: 'WordsStatController'
         }).when('/wordDetail/:phoneId', {
-            templateUrl: 'wordDetail.html'
+            templateUrl: 'wordDetail.html',
+            controller: 'WordDetailController'
         }).otherwise('/wordsStat');
     }
 ]).controller('WordsStatController', function ($scope) {
@@ -16,4 +17,6 @@ angular.module('phonecatApp').config(['$locationProvider', '$routeProvider',
         'adam': 1,
         "apple": 34
     }
+}).controller('WordDetailController', function ($scope, $routeParams) {
+    $scope.params = $routeParams
 });
