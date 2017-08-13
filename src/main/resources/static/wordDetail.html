@@ -5,8 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-1 word stats
+<div ng-repeat="content in contentList">
+    <p ng-bind-html="content"></p>
+</div>
 
-{{params}}
+<canvas id="line" class="chart chart-bar" chart-data="data" chart-labels="labels">
+</canvas>
 </body>
 </html>

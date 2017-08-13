@@ -8,10 +8,13 @@
 stats
 
 <ul>
-    <li ng-repeat="(word, count) in words">
-        <a href="#!/wordDetail/{{word}}">{{word}}-{{count}}</a>
+    <li ng-repeat="wordEntry in words | orderBy:'-count '" >
+        <a href="#!/wordDetail/{{wordEntry.word}}">{{wordEntry.word}}</a>-{{wordEntry.count}}
     </li>
 </ul>
+
+
+
 
 </body>
 </html>

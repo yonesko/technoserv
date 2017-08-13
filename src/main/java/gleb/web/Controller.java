@@ -24,19 +24,19 @@ public class Controller {
         return wordsRepo.wordStat();
     }
 
-    @GetMapping("/refine")
+    @GetMapping("/detail")
     public Map<String, Object> refineSearch(@RequestParam("word") String word) {
         Set<NewsItem> newsItems = wordsRepo.findByWord(word);
 
-        List<String> cumulativeContent = new ArrayList<>(newsItems.size());
-        Map<ZonedDateTime, Integer> chart = new HashMap<>();
+        List<String> contentList = new ArrayList<>(newsItems.size());
+        Map<String, Integer> chart = new HashMap<>();
         newsItems.forEach(newsItem -> {
-            cumulativeContent.add(newsItem.getContent());
-            chart.compute(newsItem.getPublicationDateTime(), (instant, count) -> count == null ? 1 : count + 1);
+            contentList.add(newsItem.getContent());
+            chart.compute(newsItem.getPublicationDateTime().toLocalDate().toString(), (instant, count) -> count == null ? 1 : count + 1);
         });
 
         Map<String, Object> model = new HashMap<>();
-        model.put("cumulativeContent", cumulativeContent);
+        model.put("contentList", contentList);
         model.put("chart", chart);
 
         return model;

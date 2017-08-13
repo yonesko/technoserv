@@ -2,11 +2,13 @@ package gleb.data;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocumentList;
 
 import java.io.IOException;
@@ -19,11 +21,27 @@ public class WordsRepoSolr implements WordsRepo {
     @Override
     public Map<String, Integer> wordStat() {
         LukeRequest request = new LukeRequest();
+        SolrQuery query = new SolrQuery();
         request.addField("content_txt_en");
+        int wordsNum = 10_000;
+        request.setNumTerms(wordsNum);
+
+
+        query.setRows(1);
 
         try {
             LukeResponse response = request.process(solr);
-            return response.getFieldInfo().get("content_txt_en").getTopTerms().asShallowMap();
+            for (String word : response.getFieldInfo().get("content_txt_en").getTopTerms().asShallowMap().keySet()) {
+                query.addField(String.format("ttf(content_txt_en,'%s')", ClientUtils.escapeQueryChars(word)));
+            }
+
+            QueryResponse response1 = solr.query(query, SolrRequest.METHOD.POST);
+
+            Map<String, Integer> ret = new HashMap<>();
+
+            response1.getResults().get(0).getFieldValueMap().forEach((s, o) -> ret.put(s, (Integer) o));
+
+            return ret;
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
@@ -39,9 +57,10 @@ public class WordsRepoSolr implements WordsRepo {
         SolrQuery query = new SolrQuery();
         query.set("q", String.format("content_txt_en:%s", word));
         query.addHighlightField("content_txt_en");
-        query.setHighlightSimplePost("</b>");
-        query.setHighlightSimplePre("<b>");
+        query.setHighlightSimplePre("<span style=\"color: red\">");
+        query.setHighlightSimplePost("</span>");
         query.setHighlightFragsize(0);
+        query.setRows(100);
 
         try {
             QueryResponse response = solr.query(query);
