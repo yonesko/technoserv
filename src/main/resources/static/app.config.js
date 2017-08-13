@@ -38,10 +38,9 @@ angular.module('phonecatApp').config(['$locationProvider', '$routeProvider',
             $scope.contentList.push($sce.trustAsHtml(val))
         });
 
-
         $scope.labels = [];
         $scope.data = [];
-        angular.forEach(response.data.chart, function (count, day) {
+        angular.forEach(response.data.dayToTTF, function (count, day) {
             $scope.labels.push(day);
             $scope.data.push(count);
         });

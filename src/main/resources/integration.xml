@@ -10,10 +10,10 @@
 
     <bean id="solrIndex" class="gleb.integration.SolrIndexingServiceActivator"/>
 
-    <!--<feed:inbound-channel-adapter id="news" url="https://lenta.ru/rss">-->
-        <!--<int:poller fixed-rate="1000" />-->
-    <!--</feed:inbound-channel-adapter>-->
+    <feed:inbound-channel-adapter id="news" url="https://lenta.ru/rss">
+        <int:poller fixed-rate="1000" />
+    </feed:inbound-channel-adapter>
 
-    <!--<int:service-activator ref="solrIndex" input-channel="news"/>-->
+    <int:service-activator ref="solrIndex" input-channel="news"/>
 
 </beans>

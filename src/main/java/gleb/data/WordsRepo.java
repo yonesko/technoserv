@@ -6,5 +6,5 @@ import java.util.Set;
 public interface WordsRepo {
     Map<String, Integer> wordStat();
 
-    Set<NewsItem> findByWord(String word);
+    WordDetailDTO findByWord(String word);
 }
