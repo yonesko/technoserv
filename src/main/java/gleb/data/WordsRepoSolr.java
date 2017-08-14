@@ -27,7 +27,12 @@ public class WordsRepoSolr implements WordsRepo {
     public static final String TERM_FREQ = "TERM_FREQ";
     public static final String ID = "id";
     public static final String PUBLICATION_DT = "publication_dt";
-    private static SolrClient solr = new HttpSolrClient.Builder("http://localhost:8983/solr/newsitem").build();
+
+    private final SolrClient solr;
+
+    public WordsRepoSolr(SolrClient solr) {
+        this.solr = solr;
+    }
 
     @Override
     public Map<String, Integer> wordStat() {

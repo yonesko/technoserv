@@ -1,6 +1,7 @@
 package gleb.integration;
 
 import com.rometools.rome.feed.synd.SyndEntry;
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -11,9 +12,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 public class SolrIndexingServiceActivator {
-    private static SolrClient solr = new HttpSolrClient.Builder("http://localhost:8983/solr/newsitem").build();
+    private static final Logger LOG = Logger.getLogger(SolrIndexingServiceActivator.class);
+    private final SolrClient solr;
 
-    public void process(SyndEntry syndEntry) throws IOException, SolrServerException {
+    public SolrIndexingServiceActivator(SolrClient solr) {
+        this.solr = solr;
+    }
+
+    public void process(SyndEntry syndEntry) {
         String content = String.format("%s\n%s", syndEntry.getTitle(), syndEntry.getDescription().getValue());
         ZonedDateTime publishedDate = ZonedDateTime.ofInstant(syndEntry.getPublishedDate().toInstant(),
                 ZoneId.systemDefault());
@@ -23,7 +29,11 @@ public class SolrIndexingServiceActivator {
         doc.addField("content_txt_en", content);
         doc.addField("publication_dt", publishedDate.toInstant().toString());
         doc.addField("id", id);
-        solr.add(doc);
-        solr.commit(false,false);
+        try {
+            solr.add(doc);
+            solr.commit(false, false);
+        } catch (SolrServerException | IOException e) {
+            LOG.warn(e);
+        }
     }
 }

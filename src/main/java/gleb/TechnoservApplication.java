@@ -2,6 +2,7 @@ package gleb;
 
 import gleb.data.WordsRepo;
 import gleb.data.WordsRepoSolr;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,12 @@ public class TechnoservApplication {
     }
 
     @Bean
-    WordsRepo wordsRepoTest() {
-        return new WordsRepoSolr();
+    WordsRepo wordsRepo() {
+        return new WordsRepoSolr(solrClient());
+    }
+
+    @Bean
+    HttpSolrClient solrClient() {
+        return new HttpSolrClient.Builder("http://localhost:8983/solr/newsitem").build();
     }
 }
