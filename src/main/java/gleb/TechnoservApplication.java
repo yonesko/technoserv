@@ -2,26 +2,30 @@ package gleb;
 
 import gleb.data.WordsRepo;
 import gleb.data.WordsRepoSolr;
+import gleb.config.SolrIndexingServiceActivator;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
-@ImportResource("integration.xml")
 public class TechnoservApplication {
     public static void main(String[] args) {
         SpringApplication.run(TechnoservApplication.class, args);
     }
 
     @Bean
-    WordsRepo wordsRepo() {
+    public WordsRepo wordsRepo() {
         return new WordsRepoSolr(solrClient());
     }
 
     @Bean
-    HttpSolrClient solrClient() {
+    public HttpSolrClient solrClient() {
         return new HttpSolrClient.Builder("http://localhost:8983/solr/newsitem").build();
+    }
+
+    @Bean
+    public SolrIndexingServiceActivator solrIndexingServiceActivator() {
+        return new SolrIndexingServiceActivator(solrClient());
     }
 }
