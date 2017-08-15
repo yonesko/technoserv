@@ -3,3 +3,9 @@ sudo: required
 
 services:
   - docker
+
+
+deploy:
+ provider: heroku
+ api_key:
+  secure: "aaebde3c-c528-4586-ba04-b7bda10d5f12"

@@ -13,6 +13,7 @@ import org.apache.solr.common.params.TermsParams;
 
 import java.io.IOException;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,17 +43,17 @@ public class WordsRepoSolr implements WordsRepo {
         query.addTermsField(CONTENT_TXT_EN);
 
         try {
-            query.setParam(TermsParams.TERMS_LIST, findWords().stream().map(TermsResponse.Term::getTerm).distinct().collect(Collectors.joining(",")));
+            query.setParam(TermsParams.TERMS_LIST, findWords().stream().map(TermsResponse.Term::getTerm).collect(Collectors.joining(",")));
 
             QueryRequest request = new QueryRequest(query, SolrRequest.METHOD.POST);
             List<TermsResponse.Term> terms = request.process(solr).getTermsResponse().getTerms(CONTENT_TXT_EN);
 
-            return terms.stream().collect(Collectors.toMap(TermsResponse.Term::getTerm, TermsResponse.Term::getTotalTermFreq));
+            return terms.stream().collect(Collectors.toMap(TermsResponse.Term::getTerm, TermsResponse.Term::getTotalTermFreq, (aLong, aLong2) -> aLong));
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return Collections.emptyMap();
     }
 
     private List<TermsResponse.Term> findWords() throws IOException, SolrServerException {
@@ -103,6 +104,6 @@ public class WordsRepoSolr implements WordsRepo {
             e.printStackTrace();
         }
 
-        return null;
+        return new WordDetail();
     }
 }
