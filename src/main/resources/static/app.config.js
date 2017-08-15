@@ -15,15 +15,13 @@ angular.module('words-popularity-monitor').config(['$locationProvider', '$routeP
 ]).controller('WordsStatController', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
     var refresh = function () {
         $http({method: 'GET', url: "/wordStat"}).then(function (response) {
+            $scope.words = [];
 
-            var list = [];
             angular.forEach(response.data, function (val, key) {
-                list.push({word:key, count:val});
+                $scope.words.push({word:key, count:val});
             });
-
-            $scope.words = list;
-
         }, function (response) {
+            console.error(response);
         });
     };
 
@@ -46,5 +44,6 @@ angular.module('words-popularity-monitor').config(['$locationProvider', '$routeP
         });
 
     }, function (response) {
+        console.error(response);
     });
 });

@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WordDetailDTO {
-    private List<String> contentList;
-    private Map<String, Integer> dayToTTF;
+public class WordDetail {
+    private final List<String> contentList;
+    private final Map<String, Integer> dayToTTF;
 
-    public WordDetailDTO() {
+    public WordDetail() {
         contentList = new ArrayList<>();
         dayToTTF = new HashMap<>();
     }

@@ -21,7 +21,7 @@ public class TechnoservApplication {
 
     @Bean
     public HttpSolrClient solrClient() {
-        return new HttpSolrClient.Builder("http://localhost:8983/solr/newsitem").build();
+        return new HttpSolrClient.Builder("http://solr:8983/solr/newsitem").build();
     }
 
     @Bean

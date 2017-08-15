@@ -4,7 +4,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.TermsResponse;
@@ -15,7 +14,6 @@ import org.apache.solr.common.params.TermsParams;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,7 +33,7 @@ public class WordsRepoSolr implements WordsRepo {
     }
 
     @Override
-    public Map<String, Integer> wordStat() {
+    public Map<String, Long> wordStat() {
         SolrQuery query = new SolrQuery();
         query.setRequestHandler("/terms");
         query.setTerms(true);
@@ -43,18 +41,13 @@ public class WordsRepoSolr implements WordsRepo {
         query.setTermsLimit(WORDS_NUM);
         query.addTermsField(CONTENT_TXT_EN);
 
-
         try {
-            query.setParam(TermsParams.TERMS_LIST, findWords().stream().map(TermsResponse.Term::getTerm).collect(Collectors.joining(",")));
+            query.setParam(TermsParams.TERMS_LIST, findWords().stream().map(TermsResponse.Term::getTerm).distinct().collect(Collectors.joining(",")));
+
             QueryRequest request = new QueryRequest(query, SolrRequest.METHOD.POST);
             List<TermsResponse.Term> terms = request.process(solr).getTermsResponse().getTerms(CONTENT_TXT_EN);
 
-            Map<String, Integer> ret = new HashMap<>();
-
-
-            for (TermsResponse.Term term : terms) ret.put(term.getTerm(), (int) term.getTotalTermFreq());
-
-            return ret;
+            return terms.stream().collect(Collectors.toMap(TermsResponse.Term::getTerm, TermsResponse.Term::getTotalTermFreq));
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
@@ -64,27 +57,30 @@ public class WordsRepoSolr implements WordsRepo {
 
     private List<TermsResponse.Term> findWords() throws IOException, SolrServerException {
         SolrQuery query = new SolrQuery();
+
         query.setTerms(true);
         query.setTermsLimit(WORDS_NUM);
         query.addTermsField(CONTENT_TXT_EN);
-        QueryRequest request = new QueryRequest(query);
-        return request.process(solr).getTermsResponse().getTerms(CONTENT_TXT_EN);
+
+        return new QueryRequest(query).process(solr).getTermsResponse().getTerms(CONTENT_TXT_EN);
     }
 
     @Override
-    public WordDetailDTO findByWord(String word) {
-        WordDetailDTO ret = new WordDetailDTO();
+    public WordDetail findByWord(String word) {
+        WordDetail ret = new WordDetail();
 
         SolrQuery query = new SolrQuery();
         query.set("q", String.format("%s:%s", CONTENT_TXT_EN, ClientUtils.escapeQueryChars(word)));
+        query.setRows(1000);
+
         query.addField(ID);
         query.addField(PUBLICATION_DT);
         query.addField(String.format("%s:termfreq(%s, '%s')", TERM_FREQ, CONTENT_TXT_EN, ClientUtils.escapeQueryChars(word)));
+
         query.addHighlightField(CONTENT_TXT_EN);
         query.setHighlightSimplePre("<span style=\"color: red\">");
         query.setHighlightSimplePost("</span>");
         query.setHighlightFragsize(0);
-        query.setRows(1000);
 
         try {
             QueryResponse response = solr.query(query);
@@ -103,7 +99,6 @@ public class WordsRepoSolr implements WordsRepo {
             });
 
             return ret;
-
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
