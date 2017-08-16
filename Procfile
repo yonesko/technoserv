@@ -1,1 +1,1 @@
-web: docker-compose up
+web: docker run technoserv_web
