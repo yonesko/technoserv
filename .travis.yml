@@ -1,11 +1,12 @@
 language: java
-sudo: required
+#sudo: required
 
-services:
-  - docker
+#services:
+#  - docker
 
 
 deploy:
  provider: heroku
+ app: solr
  api_key:
   secure: "aaebde3c-c528-4586-ba04-b7bda10d5f12"
