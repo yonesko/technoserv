@@ -1,1 +1,1 @@
-web: docker run technoserv_web
+web: spring-boot:run
