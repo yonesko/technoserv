@@ -1,15 +1,23 @@
 package gleb;
 
+import gleb.config.SolrIndexingServiceActivator;
 import gleb.data.WordsRepo;
 import gleb.data.WordsRepoSolr;
-import gleb.config.SolrIndexingServiceActivator;
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 public class TechnoservApplication {
+    private static final Logger LOG = Logger.getLogger(TechnoservApplication.class);
+    @Autowired
+    private Environment env;
+
     public static void main(String[] args) {
         SpringApplication.run(TechnoservApplication.class, args);
     }
@@ -21,7 +29,9 @@ public class TechnoservApplication {
 
     @Bean
     public HttpSolrClient solrClient() {
-        return new HttpSolrClient.Builder("http://solr:8983/solr/newsitem").build();
+        String url = env.getProperty("solr.url");
+        LOG.info(String.format("Solr url=%s", url));
+        return new HttpSolrClient.Builder(url).build();
     }
 
     @Bean
