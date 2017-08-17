@@ -8,8 +8,8 @@ import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.params.TermsParams;
 
 import java.io.IOException;
 import java.time.ZoneId;
@@ -35,20 +35,23 @@ public class WordsRepoSolr implements WordsRepo {
 
     @Override
     public Map<String, Long> wordStat() {
-        SolrQuery query = new SolrQuery();
-        query.setRequestHandler("/terms");
-        query.setTerms(true);
-        query.setParam(TermsParams.TERMS_TTF, true);
-        query.setTermsLimit(WORDS_NUM);
-        query.addTermsField(CONTENT_TXT_EN);
-
+        SolrQuery query = new SolrQuery("*:*");
+        query.setRows(1);
         try {
-            query.setParam(TermsParams.TERMS_LIST, findWords().stream().map(TermsResponse.Term::getTerm).collect(Collectors.joining(",")));
+            List<TermsResponse.Term> termList = findAllTermsInIndex();
+            termList.forEach(term -> query.addField(String.format("prefix%s:ttf(%s,'%s')", term.getTerm(), CONTENT_TXT_EN, term.getTerm())));
 
             QueryRequest request = new QueryRequest(query, SolrRequest.METHOD.POST);
-            List<TermsResponse.Term> terms = request.process(solr).getTermsResponse().getTerms(CONTENT_TXT_EN);
+            QueryResponse response = request.process(solr);
 
-            return terms.stream().collect(Collectors.toMap(TermsResponse.Term::getTerm, TermsResponse.Term::getFrequency, (aLong, aLong2) -> aLong));
+            SolrDocument document = response.getResults().get(0);
+
+            return termList.stream()
+                    .collect(
+                            Collectors.toMap(
+                                    TermsResponse.Term::getTerm,
+                                    term -> (Long) document.get("prefix" + term.getTerm()),
+                                    (aLong, aLong2) -> aLong));
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +59,7 @@ public class WordsRepoSolr implements WordsRepo {
         return Collections.emptyMap();
     }
 
-    private List<TermsResponse.Term> findWords() throws IOException, SolrServerException {
+    private List<TermsResponse.Term> findAllTermsInIndex() throws IOException, SolrServerException {
         SolrQuery query = new SolrQuery();
 
         query.setTerms(true);
