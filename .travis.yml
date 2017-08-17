@@ -7,6 +7,6 @@ language: java
 
 deploy:
  provider: heroku
- app: solr
+ app: technoserv
  api_key:
   secure: "aaebde3c-c528-4586-ba04-b7bda10d5f12"
