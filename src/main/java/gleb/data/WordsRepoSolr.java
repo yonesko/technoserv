@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 
 public class WordsRepoSolr implements WordsRepo {
-    public static final int WORDS_NUM = 10_000;
+    public static final int WORDS_NUM = 1_000;
     public static final String CONTENT_TXT_EN = "content_txt_en";
     public static final String TERM_FREQ = "TERM_FREQ";
     public static final String ID = "id";
@@ -39,7 +39,9 @@ public class WordsRepoSolr implements WordsRepo {
         query.setRows(1);
         try {
             List<TermsResponse.Term> termList = findAllTermsInIndex();
-            termList.forEach(term -> query.addField(String.format("prefix%s:ttf(%s,'%s')", term.getTerm(), CONTENT_TXT_EN, term.getTerm())));
+            termList.stream()
+                    .filter(term -> !term.getTerm().contains("'"))
+                    .forEach(term -> query.addField(String.format("prefix%d:ttf(%s,'%s')", term.getTerm().hashCode(), CONTENT_TXT_EN, term.getTerm())));
 
             QueryRequest request = new QueryRequest(query, SolrRequest.METHOD.POST);
             QueryResponse response = request.process(solr);
@@ -50,8 +52,7 @@ public class WordsRepoSolr implements WordsRepo {
                     .collect(
                             Collectors.toMap(
                                     TermsResponse.Term::getTerm,
-                                    term -> (Long) document.get("prefix" + term.getTerm()),
-                                    (aLong, aLong2) -> aLong));
+                                    term -> (Long) document.get(String.format("prefix%d", term.getTerm().hashCode()))));
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
