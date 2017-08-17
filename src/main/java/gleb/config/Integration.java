@@ -1,6 +1,7 @@
 package gleb.config;
 
 import com.rometools.rome.feed.synd.SyndEntry;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.core.MessageSource;
@@ -15,15 +16,14 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class Integration {
-
     @Bean
-    public MessageSource<SyndEntry> rssMessageSource() throws MalformedURLException {
-        return new FeedEntryMessageSource(new URL("https://lenta.ru/rss"), "news");
+    public MessageSource<SyndEntry> rssMessageSource(@Value("${feed.url}") String url) throws MalformedURLException {
+        return new FeedEntryMessageSource(new URL(url), "news");
     }
 
     @Bean
-    public IntegrationFlow pollingFlow(SolrIndexingServiceActivator activator) throws MalformedURLException {
-        return IntegrationFlows.from(rssMessageSource(), c -> c.poller(Pollers.fixedRate(3, TimeUnit.SECONDS )))
+    public IntegrationFlow pollingFlow(MessageSource<SyndEntry> messageSource, SolrIndexingServiceActivator activator) throws MalformedURLException {
+        return IntegrationFlows.from(messageSource, c -> c.poller(Pollers.fixedRate(3, TimeUnit.SECONDS)))
                 .handle(activator)
                 .get();
     }
