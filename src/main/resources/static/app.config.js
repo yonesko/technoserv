@@ -21,7 +21,7 @@ angular.module('words-popularity-monitor').config(['$locationProvider', '$routeP
                 $scope.words.push({word:key, count:val});
             });
         }, function (response) {
-            console.error(response);
+            $scope.error = response;
         });
     };
 
@@ -44,6 +44,6 @@ angular.module('words-popularity-monitor').config(['$locationProvider', '$routeP
         });
 
     }, function (response) {
-        console.error(response);
+        $scope.error = response;
     });
 });
