@@ -48,7 +48,7 @@ public class WordsRepoSolr implements WordsRepo {
             QueryRequest request = new QueryRequest(query, SolrRequest.METHOD.POST);
             List<TermsResponse.Term> terms = request.process(solr).getTermsResponse().getTerms(CONTENT_TXT_EN);
 
-            return terms.stream().collect(Collectors.toMap(TermsResponse.Term::getTerm, TermsResponse.Term::getTotalTermFreq, (aLong, aLong2) -> aLong));
+            return terms.stream().collect(Collectors.toMap(TermsResponse.Term::getTerm, TermsResponse.Term::getFrequency, (aLong, aLong2) -> aLong));
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
