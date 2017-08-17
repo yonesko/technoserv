@@ -2,8 +2,11 @@ FROM maven:alpine
 
 WORKDIR /app
 
-ADD . /app
+ADD src /app
+ADD pom.xml /app
 
-EXPOSE 8080
+
+
+#EXPOSE 8080
 
 CMD ["mvn", "spring-boot:run"]
