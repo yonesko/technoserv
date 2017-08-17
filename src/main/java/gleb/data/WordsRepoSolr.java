@@ -60,6 +60,7 @@ public class WordsRepoSolr implements WordsRepo {
         SolrQuery query = new SolrQuery();
 
         query.setTerms(true);
+        query.setRequestHandler("/terms");
         query.setTermsLimit(WORDS_NUM);
         query.addTermsField(CONTENT_TXT_EN);
 

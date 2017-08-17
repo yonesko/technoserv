@@ -5,11 +5,20 @@ import gleb.data.WordsRepo;
 import gleb.data.WordsRepoSolr;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.request.CoreAdminRequest;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.io.IOException;
+import java.time.Instant;
 
 @SpringBootApplication
 public class TechnoservApplication {
@@ -17,6 +26,16 @@ public class TechnoservApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TechnoservApplication.class, args);
+    }
+
+//    @Bean
+    CommandLineRunner commandLineRunner(SolrClient solrClient) throws IOException, SolrServerException {
+        return args -> {
+            System.out.println(CoreAdminRequest.getCoreStatus("0fba93de8476", solrClient));
+
+
+            System.exit(1);
+        };
     }
 
     @Bean
