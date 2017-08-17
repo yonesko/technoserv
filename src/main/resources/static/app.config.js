@@ -12,7 +12,7 @@ angular.module('words-popularity-monitor').config(['$locationProvider', '$routeP
             controller: 'WordDetailController'
         }).otherwise('/wordsStat');
     }
-]).controller('WordsStatController', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
+]).controller('WordsStatController', ['$rootScope', '$scope', '$http', '$interval', function ($rootScope, $scope, $http, $interval) {
     var refresh = function () {
         $http({method: 'GET', url: "/wordStat"}).then(function (response) {
             $scope.words = [];
@@ -21,7 +21,7 @@ angular.module('words-popularity-monitor').config(['$locationProvider', '$routeP
                 $scope.words.push({word:key, count:val});
             });
         }, function (response) {
-            $scope.error = response;
+            $rootScope.error = response;
         });
     };
 
@@ -44,6 +44,6 @@ angular.module('words-popularity-monitor').config(['$locationProvider', '$routeP
         });
 
     }, function (response) {
-        $scope.error = response;
+        $rootScope.error = response;
     });
 });
